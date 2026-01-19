@@ -22,7 +22,7 @@ document_desc.textContent = `${description} | ${location} | ${hours}`;
 // Order management - using modern JavaScript array and object features
 let currentOrder = [];
 
-// ✅ ES2017+ Feature: Async/Await with Promise
+//  ES2017+ Feature: Async/Await with Promise
 // Modern way to handle asynchronous operations
 async function loadMenu() {
     try {
