@@ -19,6 +19,9 @@ document_title.textContent = shopName;
 const document_desc = document.getElementById("desc");
 document_desc.textContent = `${description} | ${location} | ${hours}`;
 
+// Order management - using modern JavaScript array and object features
+let currentOrder = [];
+
 // ✅ ES2017+ Feature: Async/Await with Promise
 // Modern way to handle asynchronous operations
 async function loadMenu() {
@@ -39,13 +42,22 @@ async function loadMenu() {
             const itemPrice = item?.price ?? 0;
             const itemDesc = item?.description ?? "No description";
             const ingredients = item?.ingredients?.join(", ") ?? "Ingredients not listed";
+            const itemImage = item?.image ?? "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=300&fit=crop";
             
             li.innerHTML = `
+                <img src="${itemImage}" alt="${itemName}" class="menu-item-img" onerror="this.src='https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=300&fit=crop'">
                 <strong>${itemName} - $${itemPrice.toFixed(2)}</strong>
                 <span>${itemDesc}</span>
                 <span style="font-size: 0.85em; color: #888; margin-top: 8px;">Ingredients: ${ingredients}</span>
             `;
             
+            // Add "Add to Order" button
+            const addButton = document.createElement("button");
+            addButton.className = "add-to-order-btn";
+            addButton.textContent = "Add to Order";
+            addButton.onclick = () => addToOrder(item);
+            
+            li.appendChild(addButton);
             list.appendChild(li);
         });
         
@@ -59,6 +71,97 @@ async function loadMenu() {
         document.getElementById("menu").innerHTML = "<li>Error loading menu. Please try again later.</li>";
     }
 }
+
+// Add item to order
+function addToOrder(item) {
+    // Using optional chaining and nullish coalescing for safe property access
+    const orderItem = {
+        id: Date.now(), // Unique ID for each order item
+        name: item?.name ?? "Unknown",
+        price: item?.price ?? 0
+    };
+    
+    currentOrder.push(orderItem);
+    updateOrderDisplay();
+    console.log("Added to order:", orderItem.name);
+}
+
+// Remove item from order
+function removeFromOrder(itemId) {
+    currentOrder = currentOrder.filter(item => item?.id !== itemId);
+    updateOrderDisplay();
+    console.log("Removed item from order");
+}
+
+// Update the order display
+function updateOrderDisplay() {
+    const orderList = document.getElementById("order-list");
+    const orderTotal = document.getElementById("order-total");
+    const checkoutBtn = document.getElementById("checkout-btn");
+    
+    // Clear current display
+    orderList.innerHTML = "";
+    
+    // Check if order is empty using optional chaining
+    if (!currentOrder?.length) {
+        orderList.innerHTML = '<li class="empty-order">Your order is empty. Add some items!</li>';
+        orderTotal.textContent = "Total: $0.00";
+        checkoutBtn.disabled = true;
+        return;
+    }
+    
+    // Display each order item
+    let total = 0;
+    currentOrder.forEach(item => {
+        const li = document.createElement("li");
+        
+        // Using nullish coalescing for default values
+        const itemName = item?.name ?? "Unknown Item";
+        const itemPrice = item?.price ?? 0;
+        
+        li.innerHTML = `
+            <div class="item-info">
+                <span class="item-name">${itemName}</span>
+            </div>
+            <span class="item-price">$${itemPrice.toFixed(2)}</span>
+        `;
+        
+        const removeBtn = document.createElement("button");
+        removeBtn.className = "remove-btn";
+        removeBtn.textContent = "Remove";
+        removeBtn.onclick = () => removeFromOrder(item.id);
+        
+        li.appendChild(removeBtn);
+        orderList.appendChild(li);
+        
+        total += itemPrice;
+    });
+    
+    orderTotal.textContent = `Total: $${total.toFixed(2)}`;
+    checkoutBtn.disabled = false;
+}
+
+// Checkout function
+async function checkout() {
+    if (!currentOrder?.length) {
+        alert("Your order is empty!");
+        return;
+    }
+    
+    const total = currentOrder.reduce((sum, item) => sum + (item?.price ?? 0), 0);
+    const itemCount = currentOrder?.length ?? 0;
+    
+    alert(`Order placed successfully!\n\nItems: ${itemCount}\nTotal: $${total.toFixed(2)}\n\nThank you for your order!`);
+    
+    console.log("Order placed:", currentOrder);
+    
+    // Clear the order
+    currentOrder = [];
+    updateOrderDisplay();
+}
+
+// Setup checkout button
+document.getElementById("checkout-btn").addEventListener("click", checkout);
 
 // Another async function demonstrating await
 async function loadSpecialOffers() {

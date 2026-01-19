@@ -26,30 +26,35 @@ export function fetchMenu() {
                     name: "Espresso", 
                     price: 3.50, 
                     description: "Rich and bold shot of coffee",
-                    ingredients: ["Coffee beans", "Water"]
+                    ingredients: ["Coffee beans", "Water"],
+                    image: "https://images.unsplash.com/photo-1579992357154-faf4bde95b3d?w=400&h=300&fit=crop"
                 },
                 { 
                     name: "Latte", 
                     price: 4.50, 
                     description: "Smooth espresso with steamed milk",
-                    ingredients: ["Espresso", "Milk", "Foam"]
+                    ingredients: ["Espresso", "Milk", "Foam"],
+                    image: "https://images.unsplash.com/photo-1561882468-9110e03e0f78?w=400&h=300&fit=crop"
                 },
                 { 
                     name: "Cappuccino", 
                     price: 4.25, 
                     description: "Equal parts espresso, milk, and foam",
-                    ingredients: ["Espresso", "Milk", "Foam"]
+                    ingredients: ["Espresso", "Milk", "Foam"],
+                    image: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=400&h=300&fit=crop"
                 },
                 { 
                     name: "Mocha", 
                     price: 5.00, 
                     description: "Chocolate-infused coffee delight",
-                    ingredients: ["Espresso", "Chocolate", "Milk", "Whipped cream"]
+                    ingredients: ["Espresso", "Chocolate", "Milk", "Whipped cream"],
+                    image: "https://images.unsplash.com/photo-1607260550778-aa8d84a7cba1?w=400&h=300&fit=crop"
                 },
                 { 
                     name: "Americano", 
                     price: 3.75, 
-                    description: "Espresso diluted with hot water"
+                    description: "Espresso diluted with hot water",
+                    image: "https://images.unsplash.com/photo-1531835551805-16d864c8d311?w=400&h=300&fit=crop"
                 }
             ]);
         }, 1000);
